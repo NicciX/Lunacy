@@ -1,0 +1,95 @@
+--Elders {"location", xcoord, ycoord, mapID, "Name of Elder", criteriaID}
+--Sorted alphabetically by zone and index key by Fel.
+Lunacy_Continents = {
+	[7] = "Kalimdor",
+	[10] = "Kalimdor",
+	[12] = "Kalimdor",
+	[13] = "EasternKingdoms",
+	[210] = "EasternKingdoms",
+	[224] = "EasternKingdoms",
+	[2413] = "Harandar",
+	[2537] = "Harandar",
+	
+}
+Lunacy_Elders = {
+	["Northrend"] = {
+		["Arp"] = {"Borean Tundra", 57.3, 43.7, 486, "Elder Arp", 5145},
+		["Northal"] = {"Borean Tundra", 33.8, 34.4, 486, "Elder Northal", 5146},
+		["Pamuya"] = {"Borean Tundra", 42.9, 49.6, 486, "Elder Pamuya", 5157},
+		["Sardis"] = {"Borean Tundra", 59.1, 65.6, 486, "Elder Sardis", 5141},
+		["Morthie"] = {"Dragonblight", 29.7, 55.9, 488, "Elder Morthie", 5143},
+		["Skywarden"] = {"Dragonblight", 35.1, 48.3, 488, "Elder Skywarden", 5159},
+		["Thoim"] = {"Dragonblight", 48.8, 78.2, 488, "Elder Thoim", 5154},
+		["Beldak"] = {"Grizzly Hills", 60.6, 27.7, 490, "Elder Beldak", 5142},
+		["Lunaro"] = {"Grizzly Hills", 80.5, 37.1, 490, "Elder Lunaro", 5149},
+		["Whurain"] = {"Grizzly Hills", 64.2, 47, 490, "Elder Whurain", 5158},
+		["Sandrene"] = {"Sholazar Basin", 49.7, 63.5, 493, "Elder Sandrene", 5147},
+		["Wanikaya"] = {"Sholazar Basin", 63.8, 49, 493, "Elder Wanikaya", 5148},
+		["Fargal"] = {"The Storm Peaks", 28.9, 73.7, 495, "Elder Fargal", 5144},
+		["Graymane"] = {"The Storm Peaks", 41.2, 84.7, 495, "Elder Graymane", 5155},
+		["Muraco"] = {"The Storm Peaks", 64.6, 51.3, 495, "Elder Muraco", 5160},
+		["Stonebeard"] = {"The Storm Peaks", 31.3, 37.6, 495, "Elder Stonebeard", 5156},
+		["Bluewolf"] = {"Wintergrasp", 49, 13.9, 501, "Elder Bluewolf", 5150},
+		["Tauros"] = {"Zul'Drak", 58.9, 56, 496, "Elder Tauros", 5151}
+	},
+	["EasternKingdoms"] = {
+		["Bellowrage"] = {"Blasted Lands", 54.3, 49.5, 17, "Elder Bellowrage", 1923},
+		["Dawnstrider"] = {"Burning Steppes", 52.36, 23.91, 36, "Elder Dawnstrider", 1940},
+		["Rumblerock"] = {"Burning Steppes", 70.11, 45.41, 36, "Elder Runblerock", 1939},
+		["Winterhoof"] = {"Cape of Stranglethorn", 39.95, 72.52, 210, "Elder Winterhoof", 1927},
+		["Goldwell"] = {"Dun Morogh", 53.95, 49.94, 27, "Elder Goldwell", 1922},
+		["Snowcrown"] = {"Eastern Plaguelands", 75.7, 54.6, 23, "Elder Snowcrown", 1947},
+		["Windrun"] = {"Eastern Plaguelands", 35.6, 68.8, 23, "Elder Windrun", 1946},
+		["Stormbrow"] = {"Elwynn Forest", 39.7, 63.6, 37, "Elder Stormbrow", 1924}, 
+		["Bronzebeard"] = {"Ironforge", 28.1, 17.0, 87, "Elder Bronzebeard", 1997},
+		["Silvervein"] = {"Loch Modan", 33.41, 46.51, 48, "Elder Silvervein", 1937},
+		["Starglade"] = {"Northern Stranglethorn", 71.0, 34.3, 50, "Elder Sarglade", 1926},
+		["Ironband"] = {"Searing Gorge", 21.1, 78.8, 32, "Elder Ironband", 1942},
+		["Obsidian"] = {"Silverpine Forest", 44.98, 41.15, 21, "Elder Obsidian", 1945},
+		["Hammershout"] = {"Elwynn Forest", 32.1, 52.8, 37, "Elder Hammershout", 1998},
+		["Highpeak"] = {"The Hinterlands", 49.9, 47.9, 26, "Elder Highpeak", 1941},
+		--["Graveborn"] = {"Tirisfal Glades", 61.7, 53.7, 18, "Elder Graveborn", 1944},
+		--["Darkcore"] = {"Undercity", 66.6, 37.8, 90, "Elder Darkcore", 1993},
+		["Moonstrike"] = {"Western Plaguelands", 69.2, 73.5, 22, "Elder Moonstrike", 1950},
+		["Meadowrun"] = {"Western Plaguelands", 63.5, 36.1, 22, "Elder Meadowrun", 1925},
+		["Skychaser"] = {"Westfall", 56.6, 47.0, 52, "Elder Skychaser", 1939},
+		["Firebeard"] = {"Twilight Highlands", 50.9, 70.4, 241, "Elder Firebeard", 18161},
+		["Darkfeather"] = {"Twilight Highlands", 51.8, 33, 241, "Elder Darkfeather", 18162}
+	},
+	["Kalimdor"] = {
+		["Riversong"] = {"Ashenvale", 35.57, 48.88, 63, "Elder Riversong", 1954},
+		["Skygleam"] = {"Azshara", 64.7, 79.3, 76, "Elder Skygleam", 1917},
+		["Starweave"] = {"Darkshore", 49.5, 18.9, 62, "Elder Starweave", 1952},
+		["Bladeswift"] = {"Darnassus", 39.2, 31.8, 89, "Elder Bladeswift", 1999},
+		--["Runetotem"] = {"Durotar", 53.1, 43.5, 1, "Elder Runetotem", 1916},
+		["Nightwind"] = {"Felwood", 38.3, 52.9, 77, "Elder Nightwind", 1957},
+		["Grimtotem"] = {"Feralas", 76.71, 37.89, 69, "Elder Grimtotem", 1955},
+		["Mistwalker"] = {"Feralas", 62.6, 31.1, 69, "Elder Mistwalker", 1956}, --inside the arena area of Dire Maul
+		--["Bloodhoof"] = {"Mulgore", 48.3, 53.4, 9, "Elder Bloodhoof", 1953},
+		--["Moonwarden"] = {"Northern Barrens", 48.5, 59.3, 10, "Elder Moonwarden", 1918},
+		["Windtotem"] = {"Northern Barrens", 68.35, 69.94, 10, "Elder Windtotem", 1920},
+		--["Darkhorn"] = {"Orgrimmar", 53.2, 59.8, 321, "Elder Darkhorn", 1991},
+		["Bladesing"] = {"Silithus", 53.02, 35.48, 81, "Elder Bladesing", 1966},
+		["Primestone"] = {"Silithus", 30.8, 13.31, 81, "Elder Primestone", 1965},
+		--["HighMountain"] = {"Southern Barrens", 41.5, 47.5, 199, "Elder High Mountain", 1919},
+		["Dreamseer"] = {"Tanaris", 51.4, 28.8, 71, "Elder Dreamseer", 1961},
+		["Ragetotem"] = {"Tanaris", 37.2, 79.0, 71, "Elder Ragetotem", 1960},
+		["Bladeleaf"] = {"Teldrassil", 56.9, 53.1, 57, "Elder Bladeleaf", 1951},
+		["Morningdew"] = {"Thousand Needles", 77.1, 75.6, 64, "Elder Morningdew", 1959},
+		["Skyseer"] = {"Thousand Needles", 46.4, 51.0, 64, "Elder Skyseer", 1958},
+		--["Wheathoof"] = {"Thunder Bluff", 72.2, 23.5, 362, "Elder Ezra Wheathoof", 1992},
+		["Thunderhorn"] = {"Un'Goro Crater", 50.38, 76.17, 78, "Elder Thunderhorn", 1962},
+		["Brightspear"] = {"Winterspring", 53.2, 56.7, 83, "Elder Brightspear", 1963},
+		["Stonespire"] = {"Winterspring", 60.0, 49.9, 83, "Elder Stonespire", 1964},
+		["Menkhaf"] = {"Uldum", 65.5, 18.6, 249, "Elder Menkhaf", 18159},
+		["Sekhemi"] = {"Uldum", 31.58, 62.99, 249, "Elder Sekhemi", 18160},
+		["Windsong"] = {"Hyjal", 26.6, 62, 198, "Elder Windsong", 18156},
+		["Evershade"] = {"Hyjal", 62.5, 22.8, 198, "Elder Evershade", 18155}
+	},
+	["Outlands"] = {
+	},
+	["Deepholm"] = {
+		["Stonebrand"] = {"Deepholm", 49.7, 54.8, 640, "Elder Stonebrand", 18157},
+		["Deepforge"] = {"Deepholm", 27, 69, 640, "Elder Stonebrand", 18158}
+	}
+}
