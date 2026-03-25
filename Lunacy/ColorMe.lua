@@ -32,6 +32,7 @@ local ColorTable = {
 	["IndependentBlue"] = {"4682B4", "blue"},
 	["Azure"] = {"007FFF", "blue"},
 	["PrussianBlue"] = {"003153", "blue"},
+	["Cobalt"] = {"0047AB", "blue"},
 	["SpaceCadet"] = {"1D2951", "blue"},
 	["QueenBlue"] = {"436B95", "blue"},
 	["Periwinkle"] = {"CCCCFF", "blue"},
@@ -47,22 +48,22 @@ local ColorTable = {
 	["SunshineYellow"] = {"FFFD37", "yellow"},
 	["CanaryYellow"] = {"FFEF00", "yellow"},
 	["LemonYellow"] = {"FDFF00", "yellow"},
-	["Goledenred"] = {"DAA520", "yellow"},
+	["Goldenrod"] = {"DAA520", "yellow"},
 	["Saffron"] = {"F4C430", "yellow"},
 	["Citrine"] = {"E4D00A", "yellow"},
 	["Trombone"] = {"D2B55B", "yellow"},
 	["LightYellow"] = {"FFFFE0", "yellow"},
 	["LemonChiffon"] = {"FFFACD", "yellow"},
-	["Flax"] = "EEDC82", {"yellow"},
+	["Flax"] = {"EEDC82", "yellow"},
 	["LightGoldenrod"] = {"FAFAD2", "yellow"},
-	["Gold"] = "FFD700", {"yellow"},
+	["Gold"] = {"FFD700", "yellow"},
 	["SafetyYellow"] = {"EED202", "yellow"},
 	["LemonYellow"] = {"FDFF00", "yellow"},
 	["Cream"] = {"FFFFCC", "yellow"},
 	["Laguna"] = {"F8E473", "yellow"},
 	["SuppleOrange"] = {"E8AC41", "yellow"},
 	["NeonYellow"] = {"CFFF04", "yellow"},
-	["Sand"] = "E2CA76", {"yellow"},
+	["Sand"] = {"E2CA76", "yellow"},
 	["Sunflower"] = {"FFDA03", "yellow"},
 	["Bumblebee"] = {"FCE205", "yellow"},
 	["Butter"] = {"FFFD74", "yellow"},
@@ -94,8 +95,10 @@ local ColorTable = {
 	["Olive"] = {"708238", "green"},
 	["HunterGreen"] = {"3F704D", "green"},
 	["Artichoke"] = {"8F9779", "green"},
+	["Verdant"] = {"12674a", "green"},
 	["MyrtleGreen"] = {"317873", "green"},
 	["Emerald"] = {"50C878", "green"},
+	["Pine"] = {"A4FF77", "green"},
 	["NeonGreen"] = {"39FF14", "green"},
 	["SacramentoGreen"] = {"043927", "green"},
 	["SeaGreen"] = {"2E8B57", "green"},
@@ -145,6 +148,14 @@ local ColorTable = {
 	["Palatinate"] = {"72246C", "purple"},
 	["DeepPurple"] = {"301934", "purple"},
 	["AfricanViolet"] = {"B284BE", "purple"},
+	--Brown
+	["Chocolate"] = {"2B1700", "brown"},
+	["Umber"] = {"362312", "brown"},
+	["Mocha"] = {"3B270C", "brown"},
+	["Hickory"] = {"351E10", "brown"},
+	["Coffee"] = {"4B3619", "brown"},
+	["Brown"] = {"48260D", "brown"}, --Pecan
+	["Wood"] = {"402F1D", "brown"},
 	--Red
 	["Red"] = {"D0312D", "red"},
 	["ImperialRed"] = {"ED2939", "red"},
@@ -170,11 +181,13 @@ local ColorTable = {
 	["Salmon"] = {"FA8072", "red"},
 	["Tomato"] = {"FF6347", "red"},
 	["BloodRed"] = {"660000", "red"},
+	["Vixen"] = {"97131A", "red"}, -- Vermillion Scarlet
 	--White
 	["White"] = {"FFFFFF", "white"},
 	["Smoke"] = {"F5F5F5", "white"},
 	["BabyPowder"] = {"FEFEFA", "white"},
 	["Snow"] = {"F5FEFD", "white"},
+	["Silver"] = {"777781", "white"},
 	["Ivory"] = {"FFFFF0", "white"},
 	["Seashell"] = {"FFF5EE", "white"},
 	["Cornsilk"] = {"FFF8DC", "white"},
@@ -200,6 +213,7 @@ local ColorTable = {
 	["Gunmetal"] = {"2C3539", "black"},
 	["Iridium"] = {"3D3C3A", "black"},
 	["Jet"] = {"343434", "black"},
+	["Obsidian"] = {"0D031B", "black"},
 	["Licorice"] = {"1A1110", "black"},
 	["Oil"] = {"3B3131", "black"},
 }
@@ -211,14 +225,50 @@ function Color(name)
 	end
 end
 
+
+
+function GetHexColor(clr)
+	if ColorTable[clr] and ColorTable[clr][1] then
+		return ColorTable[clr][1]
+	end
+end
+
 function SetColorGroup(group)
 	if ColorTable.DEX[group] then
 		currentGroup = group
 		curDex = 0
 		group = caPit(group)
-		Ramble("color group set to "..colorMe(group,group)..".", 1, "|cff00ff00[ColorMe]|r|cffa4ff77 |r")
+		Ramble("color group set to "..colorMe(group,group)..".", colorMe("[ColorMe] ", "Pine"))
+	elseif group and ColorTable[caPit(group)] then
+		group = caPit(group)
+		currentGroup = ColorTable[group][2]
+		curDex = 0
+		local brk
+		local tbl = ColorTable.DEX[currentGroup]
+		repeat
+			curDex = curDex + 1
+			if curDex > #tbl then
+				brk = "shit:"
+				curDex = 0
+			elseif tbl[curDex] == group then
+				brk = true
+				--curDex = curDex - 1
+			end
+		until brk
+		if L_DBG >= 1 then
+			Ramble(colorMe(group, group),colorMe("[ColorMe] ", "Pine"))
+		end
+		SetLoco("coLor",group)
 	else
 		Ramble("~invalid color group~", 1, "|cff00ff00[ColorMe]|r|cffa4ff77 |r")
+	end
+end
+
+function raInBow(cG, cD)
+	currentGroup = cG
+	curDex = cD
+	if curDex > #ColorTable.DEX[currentGroup] then
+		curDex = 1
 	end
 end
 
@@ -234,7 +284,7 @@ function GetNextColor(tag)
 		end
 		curClr = ColorTable.DEX[currentGroup][curDex]
 	end
-	return curClr, Color(curClr)
+	return curClr, Color(curClr), currentGroup, curDex
 end
 
 function popClrTbl()

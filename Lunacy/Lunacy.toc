@@ -3,17 +3,19 @@
 ## IconTexture: Interface/Icons/ui_spellbook_onebutton.blp
 ## Category: Misc
 ## Title: Lunacy
-## Notes: Howl at the Moon.
+## Notes: ~Lucky Doo's and Ropes~.
 ## Author: Niccissa
-## Version: 12.0.0.12
+## Version: 1.1.39
 ## SavedVariables: Luna, Gathers, coDex
 
 libs\HereBeDragons\HereBeDragons-2.0.lua
 libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
 
+Gyre.lua
 ColorMe.lua
 Helpers.lua
 Lunacy.lua
 Compass.lua
+Grimoire.lua
 WhereIs.lua
 LunarEldersLocations.lua

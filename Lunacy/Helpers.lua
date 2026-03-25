@@ -22,49 +22,57 @@ function GetFlightMaster()
         --print(tostring(node.name))
         local t={} ; i=1
         for str in string.gmatch(node.name, "([^,]+)") do
+			--print(str)
             t[i] = str
             i = i + 1
         end
-        
-        if (#t < 2) then  return "Not in questing zone" end
-        
-        local nodeZoneName = strsub(t[2], 2)      
-        local mapInfo = C_Map.GetMapInfo(map)
-        --print(tostring(factionCode))
-		--print(tostring(node.faction))
-        if ((factionCode == node.faction or node.faction == 0)
-        and mapInfo.name == nodeZoneName) then
-            --print(tostring(nodeZoneName))
-            local x = floor(node.position.x * 10000) / 100
-            local y = floor(node.position.y * 10000) / 100
-            
-            local distance = ((pX - x)^2 + (pY - y)^2)^0.5
-            
-            if (not minDistance or minDistance > distance) then
-                minDistance = distance
-                minNode = node
-				nName = t[1]
-            end
-        end
+        --print(tostring(#t))
+        if (#t > 1) then
+			local nodeZoneName = strsub(t[2], 2)      
+			local mapInfo = C_Map.GetMapInfo(map)
+			--print(tostring(factionCode))
+			--print(tostring(node.faction))
+			if ((factionCode == node.faction or node.faction == 0)
+			and mapInfo.name == nodeZoneName) then
+				--print(tostring(nodeZoneName))
+				local x = floor(node.position.x * 10000) / 100
+				local y = floor(node.position.y * 10000) / 100
+				
+				local distance = ((pX - x)^2 + (pY - y)^2)^0.5
+				
+				if (not minDistance or minDistance > distance) then
+					minDistance = distance
+					minNode = node
+					nName = t[1]
+				end
+			end
+		end
     end
     if (minNode) then
 		if C_Map.CanSetUserWaypointOnMap(map) then
-			local mapPoint = UiMapPoint.CreateFromVector2D(map, minNode.position)
-			C_Map.SetUserWaypoint(mapPoint)
-			C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+			C_Map.OpenWorldMap(map)
+			SetTrack(map,minNode.position.x*100,minNode.position.y*100,
+				colorMe("Flight Master @ ", "Champagne")..colorMe(tostring(nName), "Chartreuse")
+			)
+			
+			pokeMap = true
+			--WorldMapFrame:SetShown(false)
+			--)
+			--local mapPoint = UiMapPoint.CreateFromVector2D(map, minNode.position)
+			--C_Map.SetUserWaypoint(mapPoint)
+			--C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 		end
-		pWay = {}
-		pWay.target = nName
-		pWay.map = map
-		pWay.x = minNode.position.x
-		pWay.y = minNode.position.y
-        --return minNode.name
+		--pWay = {}
+		--pWay.target = nName
+		--pWay.map = map
+		--pWay.x = minNode.position.x
+		--pWay.y = minNode.position.y
+        return minNode.name
     else 
+		print("no flight points on this map")
         return "No flight point on this UIMap" 
     end
 end
-
-
 
 function tCopy(orig)
     local orig_type = type(orig)
@@ -93,6 +101,32 @@ function remspc(str)
 		str = string.gsub(str, "(%s+)", "") 
 	end
 	return str
+end
+
+function deCHex(rgb) -- Converts RGB colors to HEX
+	local hex = ""
+	for k, v in pairs(rgb) do
+		local sex = ""
+
+		while(v > 0)do
+			local idex = math.fmod(v, 16) + 1
+			v = math.floor(v / 16)
+			sex = string.sub("0123456789ABCDEF", idex, idex)..sex			
+		end
+
+		if string.len(sex) == 0 then
+			sex = "00"
+		elseif string.len(sex) == 1 then
+			sex = "0"..sex
+		end
+		hex = hex..sex
+	end
+	return hex
+end
+
+function hex2rgb(hex)
+    hex = hex:gsub("#","")
+    return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
 end
 
 function table_to_string(tbl, del)
