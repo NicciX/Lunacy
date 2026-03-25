@@ -5,7 +5,7 @@
 ## Title: Lunacy
 ## Notes: ~Lucky Doo's and Ropes~.
 ## Author: Niccissa
-## Version: 1.1.39
+## Version: 1.1.41
 ## SavedVariables: Luna, Gathers, coDex
 
 libs\HereBeDragons\HereBeDragons-2.0.lua

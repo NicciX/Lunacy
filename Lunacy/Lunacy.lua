@@ -8,7 +8,7 @@ local addonName, addon = ...
 local prepTag = "|cff9e7bb5[Lunacy]|r "
 
 Lunacy = addon
-Lunacy.version = "1.1.39"
+Lunacy.version = "1.1.41"
 L_DBG = 1
 L_DBF = {}
 playerKey = ""

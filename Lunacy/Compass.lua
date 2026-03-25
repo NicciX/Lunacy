@@ -1470,7 +1470,7 @@ function FlashMe(wITh)
 		end
 		if hand.diSTurbed then
 			--loco.diSTurbed = loco.diSTurbed * (1 - math.random() * 0.00313)
-			loco.diSTurbed = hand.diSTurbed(loco.diSTurbed)loco.diSTurbed * (1 - math.random() * 0.00313)
+			loco.diSTurbed = hand.diSTurbed(loco.diSTurbed)
 		end
 		if type(hand.lucky) == "number" then
 			loco.lucky = loco.lucky + hand.lucky
