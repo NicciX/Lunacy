@@ -8,7 +8,7 @@ local addonName, addon = ...
 local prepTag = "|cff9e7bb5[Lunacy]|r "
 
 Lunacy = addon
-Lunacy.version = "1.1.41"
+Lunacy.version = "1.1.43"
 L_DBG = 1
 L_DBF = {}
 playerKey = ""
@@ -94,22 +94,56 @@ local function DumpCurrency(txt, chn)
 end
 
 local function lOcO(key,chn)
-	local loco = GetLoco(key)
+	local loco, farm = GetLoco(key)
 	if loco then
 		if not chn then
 			print(loco)
+			if farm then
+				print(farm)
+			end
 		else
-			SendChatMessage(loco, chn)
+			if farm then
+				SendChatMessage(farm, chn)
+				--print(farm)
+			else
+				SendChatMessage(loco, chn)
+			end
+			--SendChatMessage(loco, chn)
 		end
 	end
 end
 
 local function lOcOSet(txt,chn)
 	local cC = ChattyChop(txt)
-	local key,val,loco
+	local keyA,keyB,keyC,keyD,val,loco,serf
 	if cC[1] then
-		key = cC[1]
-		txt = string.gsub(txt, key.." ","")
+		keyA = cC[1]
+		txt = string.gsub(txt, keyA..".","")
+		txt = string.gsub(txt, keyA.." ","")
+		
+		serf = string.find(txt,"=")
+		if serf and cC[2] and string.find(txt, cC[2]) < serf then
+			keyB = cC[2]
+			txt = string.gsub(txt, keyB..".","")
+			txt = string.gsub(txt, keyB.." ","")
+			serf = string.find(txt,"=")
+		end
+		if serf and cC[3] and string.find(txt, cC[3]) < serf then
+			keyC = cC[3]
+			txt = string.gsub(txt, keyC..".","")
+			txt = string.gsub(txt, keyC.." ","")
+			serf = string.find(txt,"=")
+		end
+		if serf and cC[4] and string.find(txt, cC[4]) < serf then
+			keyD = cC[4]
+			txt = string.gsub(txt, keyD..".","")
+			txt = string.gsub(txt, keyD.." ","")
+			serf = string.find(txt,"=")
+		end
+		local spcs = string.match(txt, "(%s+)= ")
+		if spcs then
+			txt = string.gsub(txt, spcs,"")
+		end
 		txt = string.gsub(txt, "= ","")
 		txt = string.gsub(txt, "=","")
 		txt = string.gsub(txt, "\"","")
@@ -117,7 +151,11 @@ local function lOcOSet(txt,chn)
 	else
 		print("No Chat")
 	end
-	loco = SetLoco(key,val)
+	loco = SetLoco(keyA,val,keyB,keyC,keyD)
+	print(keyA)
+	print(keyB)
+	print(keyC)
+	print(val)
 	if loco then
 		if not chn then
 			print(loco)
@@ -579,7 +617,12 @@ local function lashLuna(txt, editBox)
 	lUnA(txt)
 end
 local function lashLoco(txt, editBox)
-	lOcO(txt)
+	if txt:sub(1,4) == "set " then
+		txt = string.gsub(txt, "set ", "")
+		lOcOSet(txt, chn)
+	else
+		lOcO(txt)
+	end
 end
 local function lashMph(txt, editBox)
 	Luna.phPref = "mph"

@@ -14,6 +14,9 @@ Lunacy.iconsize2 = 64
 local spdTsz = 9
 local pokeMap = true
 local linesUP
+local blkQst = {
+	[94815] = true
+}
 
 local distTab = {0,0,0,0,0,0,0,0,0}
 local timeTab = {0,0,0,0,0,0,0,0,0}
@@ -49,6 +52,19 @@ local ddC = 0
 
 loco.idx = 0
 
+local farmKeys = {
+	["decay"] = function(val)
+		if val then
+			val = tonumber(val)
+		end
+		if type(val) ~= "number" then
+			print(tostring(val).." > not a number..")
+			return val
+		end
+		local x = math.floor((val - GetTimePreciseSec()) * 100) / 100
+		return tostring(x).." seconds remaining.."
+	end
+}
 
 local dbgLatch = true
 
@@ -920,7 +936,6 @@ LunacyFrameB:SetScript("OnMouseUp", function (self, button)
 	end
 end)
 
-
 local function scuffleTime()
 	if scuffle then
 		if loco.spell == "Scarlet" then
@@ -944,6 +959,7 @@ local function scuffleTime()
 				loco.candyapple = "Scarlet"
 				Ramble(colorMe("Scarlet", "Scarlet"), colorMe("[FlashMe] ","Vixen"))
 			end
+			--Ramble(colorMe("Scarlet", "Vixen"), colorMe("[FlashMe] ","CandyApple"))
 			FlashMe("Scarlet")
 		end
 		loco.scuffle = true
@@ -959,6 +975,10 @@ local function touching(updTime)
 		loco.touchingMe = loco.touchingMe + 3 + math.random() * 11
 		PlaySoundFile(568873)
 	end
+end
+
+local function spindecay()
+	loco.lsSpinRate = loco.lsSpinRate * 0.969696
 end
 
 function LunacyUpdateController()
@@ -981,6 +1001,8 @@ function LunacyUpdateController()
 		touching(updTime)
 	elseif loco.updCnt / 11 == math.floor(loco.updCnt / 11) then
 		scuffleTime()
+	elseif loco.updCnt / 9 == math.floor(loco.updCnt / 9) then
+		spindecay()
 	--elseif loco.updCnt / 3 == math.floor(loco.updCnt / 3) then
 		
 	end
@@ -1027,7 +1049,7 @@ function Lunacy_Track(updTime)
 			loco.haunted = 0.000639
 		end
 	end
-	if math.random() * 13777 < 11 then
+	if math.random(13777) < 11 then
 		FlashMe("Vixen")
 	end
 	loco.actOut = loco.actOut or updTime
@@ -1284,7 +1306,7 @@ LunacyMainFrame:SetScript("OnEvent", function(self, event, ...)
 			Ramble(GetMoneyString(math.abs(diff)),colorMe("[Gold] ", "Gold"))
 		end
 		if amt and amt ~= Lunacy[playerKey].gold then
-			loco.lucky = loco.lucky + diff * 0.0007
+			loco.lucky = loco.lucky + diff * 0.0000177
 			if loco.lucky < 7 then
 				loco.lucky = 7
 				loco.diSTurbed = loco.diSTurbed + 0.7
@@ -1424,15 +1446,53 @@ function FlashMe(wITh)
 		if hand.troll then
 			sandy:SetDisplayInfo(hand.troll)
 		end
+		if hand.pulse then
+			if tostring(hand.pulse) == "clear" then
+				loco.pulse = nil
+			elseif not hand.pulse.cnt then
+				loco.pulse = nil
+			else
+				loco.pulse = hand.pulse
+			end
+		end
 		if hand.flashtime then
 			loco.flashTime = GetTimePreciseSec() + hand.flashtime
 		end
-		if hand.loco and hand.locoTest() then
+		if (hand.loco and hand.locoTest and hand.locoTest()) or hand.loco then
 			for k,v in pairs(hand.loco) do
-				loco[k] = v
+				--loco[k] = v
+				--print("hand.loco: "..tostring(k).." > "..tostring(v))
+				if (k == "drY" or k =="drX") and type(v) == "table" then
+					loco[k] = {}
+					for sk,sv in pairs(v) do
+						if sk == "decay" then
+							print(sv)
+							loco[k][sk] = GetTimePreciseSec() + sv
+							print(loco[k][sk])
+						else
+							loco[k][sk] = sv
+						end
+					end
+					--local n = GetTimePreciseSec() + v.decay
+					--print(n)
+					--print(GetTimePreciseSec())
+					--loco[k].decay = n
+					Ramble(colorMe("hand.", "Alabaster")..colorMe(k, "Shamrock")..colorMe(": ", "Alabaster")..colorMe(tostring(loco[k].decay), "BrightMint"),colorMe("[Gyre] ", "Purple"))
+					--print(v.decay)
+					--print(v.relax)
+				elseif k == "flashTime" then
+					loco[k] = GetTimePreciseSec() + v
+				else
+					loco[k] = v
+				end
 			end
+			
+		--elseif hand.loco then
+			--for k,v in pairs(hand.loco) do
+				--loco[k] = v
+			--end
 		end
-		
+		LunacyGyre:Show()
 		if hand.card then
 			local key = hand.card.house
 			loco[key] = loco[key] or 0
@@ -1468,6 +1528,13 @@ function FlashMe(wITh)
 		if hand.sigil then
 			loco.sigil = hand.sigil --\ox
 		end
+		if hand.cast then
+			if type(hand.cast) == "table" then
+				loco.cast = hand.cast[math.random(#hand.cast)] -- ~gnarly~
+			else
+				loco.cast = hand.cast
+			end
+		end
 		if hand.diSTurbed then
 			--loco.diSTurbed = loco.diSTurbed * (1 - math.random() * 0.00313)
 			loco.diSTurbed = hand.diSTurbed(loco.diSTurbed)
@@ -1477,8 +1544,8 @@ function FlashMe(wITh)
 		elseif type(hand.lucky) == "function" then
 			--loco.diSTurbed = loco.diSTurbed * (1 - math.random() * 0.00313)
 			loco.lucky = hand.lucky(loco.lucky)
-			if L_DBG >= 2 then
-				Ramble(colorMe("~^~] Lucky Doo HooDoo thats Yoo Hoo [~^~", "Alabaster"), colorMe("[LuckyDoo] ", "Shamrock"))
+			if L_DBG >= 4 then
+				Ramble(colorMe("~^~] Lucky Doo HooDoo thats Hoooooo~ (", "Alabaster")..colorMe(tostring(loco.lucky), "Chartreuse")..colorMe(")", "Alabaster"), colorMe("[LuckyDoo] ", "Shamrock"))
 			end
 		end
 		--loco.lucky = loco.lucky * (1 + math.random() * 0.00131)
@@ -1506,8 +1573,9 @@ function FlashMe(wITh)
 	--War
 	elseif wITh == "Scarlet" then
 		--sandy:SetDisplayInfo(21723)
+		--LunacyGyre:Show()
 		--[[
-		if not loco.scuffle then
+		if loco.spell ~= "Scarlet" then
 			loco.dippX = 0.77
 			loco.dippY = 0.77
 			loco.drX = nil
@@ -1517,17 +1585,17 @@ function FlashMe(wITh)
 			loco.pulse.amt = 0.03
 			loco.pulse.tgt = 0.44
 			LunacyGyre:Show()
-			loco.flashTime = GetTimePreciseSec() + 1
+			loco.flashTime = GetTimePreciseSec() + 3
 		end
-		]]--
 		
+		--LunacyGyre:Show()
 		if loco.spell ~= "Scarlet" then
 			loco.diSTurbed = loco.diSTurbed + 0.169
 		end
 		
-		--[[
+		
 		loco.scarlet = loco.scarlet or 0
-		loco.scarlet = loco.scarlet + (0.0369 + loco.diSTurbed / 1669)
+		loco.scarlet = loco.scarlet + (0.169 + loco.diSTurbed / 961)
 		if math.random(3696) < loco.scarlet and loco.spell ~= "Scarlet" then
 			loco.scarlet = 0
 			local pick = select(math.random(#grimoire.Scarlet.snarks), unpack(grimoire.Scarlet.snarks))
@@ -1535,11 +1603,13 @@ function FlashMe(wITh)
 			sandy:SetDisplayInfo(68967) --Lunara
 			initLineSet("Scarlet")
 		end
+		
 		colorFeed(loco.candyapple or "Black", 1)
 		loco.active = loco.active + 0.0169
-		]]--
+		
 		loco.diSTurbed = loco.diSTurbed * (1 - math.random() * 0.00313)
 		loco.lucky = loco.lucky * (1 + math.random() * 0.00131)
+		]]--
 
 	elseif wITh == "Maroon" then
 		loco.dippX = 0.66
@@ -1605,16 +1675,22 @@ function FlashMe(wITh)
 		loco.active = loco.active + 0.81
 		--return "~*~"..wITh.." showers, bring lovely flowers ~*~"
 	]]--
+	
+	
 	--Earth
 	elseif wITh == "Cobalt" then
+		--[[
 		LunacyGyre.texture:SetTexture("Interface\\Addons\\Lunacy\\Media\\LunacyE")
 		r,g,b = hex2rgb(GetHexColor("Cobalt"))
 		LunacyGyre.texture:SetVertexColor(r/255, g/255, b/255)
 		
 		colorFeed("Cobalt", 3)
+		]]--
 		if loco.drX then
-			loco.drX.decay = (loco.drX.decay * 1.001) + 5
+			loco.drX.decay = (loco.drX.decay * 1.001) + 9
 			loco.drX.relax = (loco.drX.relax * 1.07) + 0.0021
+		end
+		--[[
 		else
 			loco.drX = {}
 			loco.drX.a = -9
@@ -1642,6 +1718,7 @@ function FlashMe(wITh)
 		LunacyGyre:Show()
 		loco.flashTime = GetTimePreciseSec() + 7
 		loco.active = loco.active + 0.99
+	]]--
 	elseif wITh == "Feldgrau" then
 		LunacyGyre.texture:SetTexture("Interface\\Addons\\Lunacy\\Media\\LunacyE")
 		r,g,b = hex2rgb(GetHexColor("Feldgrau"))
@@ -1719,9 +1796,9 @@ function FlashMe(wITh)
 		--print(rnd)
 		--loco.lineAlpha = 1.0
 		if rnd < 7.7 then
-			Ramble(colorMe("Luck ^ ", "Shamrock")..colorMe(loco.lucky, "Gold"), colorMe("[Gyre] ", "Purple"))
-			Ramble(colorMe("diSTurbed /~\\ ", "Indigo")..colorMe(loco.diSTurbed, "Chartreuse"), colorMe("[Gyre] ", "Purple"))
-			Ramble(colorMe("RnD ~^~ ", "Coffee")..colorMe(rnd, "Gold"), colorMe("[Gyre] ", "Purple"))
+			Ramble(colorMe("Luck ^ ", "Shamrock")..colorMe(loco.lucky, "BrightMint"), colorMe("[Gyre] ", "Purple"))
+			Ramble(colorMe("diSTurbed /~\\ ", "Indigo")..colorMe(loco.diSTurbed, "Bumblebee"), colorMe("[Gyre] ", "Purple"))
+			Ramble(colorMe("RnD ~^~ ", "Coffee")..colorMe(rnd, "Tomato"), colorMe("[Gyre] ", "Purple"))
 			loco.pulse = nil
 			--3534100 - How is your day going?
 			rnd = select(math.floor(rnd+1), 546621,546627,546631,567134,3089702,3534100,548759,3089702)
@@ -1746,6 +1823,7 @@ function FlashMe(wITh)
 		colorFeed("Coffee", 3)
 		LunacyGyre:Show()
 		loco.diSTurbed = loco.diSTurbed - 0.21
+		loco.lsSpinRate = (loco.lsSpinRate or 0) + loco.spd * 0.36
 		if loco.diSTurbed <= 1.77 then
 			loco.diSTurbed = 0.77
 		end
@@ -1769,6 +1847,8 @@ function FlashMe(wITh)
 		colorFeed("AeroBlue", 3)
 		LunacyGyre:Show()
 		loco.diSTurbed = loco.diSTurbed - 0.11
+		loco.lsSpinRate = (loco.lsSpinRate or 0) - loco.spd * 0.63
+		
 		if loco.diSTurbed <= 1.11 then
 			loco.diSTurbed = 7.77
 		elseif loco.diSTurbed > 777 then
@@ -1863,46 +1943,90 @@ function PokeGyre()
 end
 
 function GetLoco(key)
+	if not key then
+		return
+	end
 	if loco[key] then
-		return tostring(loco[key])
+		local farm
+		if farmKeys[key] then
+			farm = farmKeys[key](loco[key])
+		end
+		return tostring(loco[key]), farm
 	end
 	local keys = {}
-	keys[1],keys[2],keys[3],keys[4] = string.split(".", key)
-	print(keys[1])
-	print(keys[2])
-	print(keys[3])
+	kyA,kyB,kyC,kyD = string.split(".", key)
+	print(kyA)
+	print(kyB)
+	print(kyC)
 	
-	local bark,bite,howl
+	local bark,bite,howl,farm
 	repeat
-		if keys[1] and type(loco[keys[1]]) == "table" then 
-			if keys[2] and type(loco[keys[1]][keys[2]]) == "table" then
-				if keys[3] and type(loco[keys[1]][keys[2]][keys[3]]) == "table" then
-					if keys[4] and type(loco[keys[1]][keys[2]][keys[3]][keys[4]]) == "table" then
-						bite = tostring(loco[keys[1]][keys[2]][keys[3]][keys[4]])--~recursively yours~--
-					else
-						bite = tostring(loco[keys[1]][keys[2]][keys[3]])
+		if kyA and type(loco[kyA]) == "table" then 
+			if kyB and type(loco[kyA][kyB]) == "table" then
+				if kyC and type(loco[kyA][kyB][kyC]) == "table" then
+					if kyD then
+						bite = tostring(loco[kyA][kyB][kyC][kyD])--~recursively yours~--
+						if farmKeys[kyD] then
+							farm = farmKeys[kyD](bite)
+						end
 					end
 				else
-					bite = tostring(loco[keys[1]][keys[2]])
+					bite = tostring(loco[kyA][kyB][kyC])
+					if farmKeys[kyC] then
+						farm = farmKeys[kyC](bite)
+					end
 				end
 			else
-				bite = tostring(loco[key[1]])
+				bite = tostring(loco[kyA][kyB])
+				farm = farmKeys[kyB](bite)
+				if farmKeys[kyB] then
+					farm = farmKeys[kyB](bite)
+				end
 			end
 		elseif not howl then
 			keys = string.split(" ", key)
 			howl = true
 		else
-			bark = "~fuck you~"
+			bark = select(math.random(4),"~*nope*~", "~surely not~", "~..appears to be empty..~", "~.nil or nan like an empty can.~", "~!you're crazy!~", "~it appears to be empty..~")
 		end
 	until bite or bark
-	return tostring(bark or bite)
+	return tostring(bark or bite), farm
 end
 
-function SetLoco(key,value)
+function SetLoco(key,value,keyb,keyc,keyd)
 	if value == "nil" then
 		value = nil
+	elseif value == "{}" then
+		value = {}
+	elseif value == "true" then
+		value = true
+	elseif value == "false" then
+		value = false
+	--elseif keyb and keyb == "keySet" then
+		
 	end
-	if loco[key] then
+	if keyd and loco[key] and loco[key][keyb] and loco[key][keyb][keyc] and loco[key][keyb][keyc][keyd] then
+		loco[key][keyb][keyc][keyd] = value
+		if type(loco[key][keyb][keyc][keyd]) == "number" then
+			loco[key][keyb][keyc][keyd] = tonumber(value)
+		else
+			loco[key][keyb][keyc] = value
+		end
+	elseif keyd and loco[key] and loco[key][keyb] and loco[key][keyb][keyc] then
+		loco[key][keyb][keyc] = value
+		if type(loco[key][keyb][keyc]) == "number" then
+			loco[key][keyb][keyc] = tonumber(value)
+		else
+			loco[key][keyb][keyc] = value
+		end
+	elseif keyd and loco[key] and loco[key][keyb] then
+		loco[key][keyb] = value
+		if type(loco[key][keyb]) == "number" then
+			loco[key][keyb] = tonumber(value)
+		else
+			loco[key][keyb] = value
+		end
+	elseif loco[key] then
 		if type(loco[key]) == "number" then
 			loco[key] = tonumber(value)
 		else
@@ -2191,7 +2315,7 @@ function UpdateTrack()
 	end
 
 	local stqID = C_SuperTrack.GetSuperTrackedQuestID()
-	if stqID and not crTrk then
+	if stqID and not crTrk and not blkQst[stqID] then
 		dbgLatch = true
 		loco.trackChange = true
 		loco.questLink = GetQuestLink(stqID)
@@ -2319,6 +2443,16 @@ function UpdateTrack()
 		end
 		if loco.trackChange then
 			loco.trMap, loco.trX, loco.trY, loco.objTxt, loco.stqID, loco.trPntMap, complete, curObj = Lunacy_GetTrackedQuest()
+			if loco.stqID and blkQst[loco.stqID] then
+				if L_DBG >= 4 or L_DBF["UpdateTrack"] then
+					Ramble(tostring(loco.stqID), colorMe("[Quest]", "Green")..colorMe(" Blocked Quest: ", "BrightMint"))
+				end
+				loco.stqID = nil
+				loco.trX = nil
+				wayDesc = nil
+				curObj = nil
+				loco.objTxt = nil
+			end
 			loco.trackChange = nil
 			if L_DBG >= 3 or L_DBF["UpdateTrack"] then
 				Ramble(tostring(wayDesc), colorMe("[Quest]", "Green")..colorMe(" WD: ", "BrightMint"))
@@ -2844,7 +2978,7 @@ function DistanceRecorder()
 			Lunacy[playerKey].totalDistance = Lunacy[playerKey].totalDistance + dis
 			local tDis = Lunacy[playerKey].totalDistance or 0
 			loco.jaunt = loco.jaunt or Lunacy[playerKey].totalDistance
-			if tDis - loco.jaunt > 177 then
+			if tDis - loco.jaunt > 144 then
 				loco.jaunt = tDis
 				if IsFlying("player") then
 					FlashMe("AeroBlue") --Wind

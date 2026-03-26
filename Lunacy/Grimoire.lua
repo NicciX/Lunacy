@@ -35,6 +35,9 @@ flashit.Spring.card.house = "verdant"
 flashit.Spring.card.affinity = 444
 flashit.Spring.card.avatar = 37154
 flashit.Spring.card.suit = "Verdant"
+flashit.Spring.locoTest = function()
+	return true
+end
 flashit.Spring.loco = {}
 flashit.Spring.loco.drY = {}
 flashit.Spring.loco.drY.a = -9
@@ -42,10 +45,44 @@ flashit.Spring.loco.drY.b = 9
 flashit.Spring.loco.drY.y = 9
 flashit.Spring.loco.drY.pong = 1
 flashit.Spring.loco.drY.relax = 0.00023
-flashit.Spring.loco.drY.decay = GetTimePreciseSec() + 23
-flashit.Spring.loco.lsRadAdj = 0.77
+flashit.Spring.loco.drY.decay = 23
+flashit.Spring.loco.lsRadAdjY = 0.77
 flashit.Spring.lucky = 0.77
-flashit.Spring.cast = "~*~ Spring showers, bring lovely flowers ~*~"
+flashit.Spring.sigil = math.random(777)
+flashit.Spring.cast = {"~*~ Ahhh, the great outdoors! ~*~", "~*~ Spring showers, bring lovely flowers ~*~"}
+
+--Cobalt
+flashit.Cobalt = {}
+flashit.Cobalt.gyretex = "LunacyE"
+flashit.Cobalt.gyreclr = "Cobalt"
+flashit.Cobalt.troll = 115505
+flashit.Cobalt.flashtime = 7
+flashit.Cobalt.active = 0.99
+flashit.Cobalt.lineclr = "Cobalt"
+flashit.Cobalt.claps = 3
+flashit.Cobalt.card = {}
+flashit.Cobalt.card.house = "azure"
+flashit.Cobalt.card.affinity = 411
+flashit.Cobalt.card.avatar = 115505
+flashit.Cobalt.card.suit = "Azure"
+flashit.Cobalt.locoTest = function()
+	if getloco(drX) then
+		return
+	end
+	return true
+end
+flashit.Cobalt.loco = {}
+flashit.Cobalt.loco.drX = {}
+flashit.Cobalt.loco.drX.a = -9
+flashit.Cobalt.loco.drX.b = 9
+flashit.Cobalt.loco.drX.x = 9
+flashit.Cobalt.loco.drX.pong = 1
+flashit.Cobalt.loco.drX.relax = 0.00027
+flashit.Cobalt.loco.drX.decay = 27
+flashit.Cobalt.loco.lsRadAdjX = 0.77
+flashit.Cobalt.lucky = 1.77
+flashit.Cobalt.sigil = math.random(777)
+flashit.Cobalt.cast = {"7^~ You'll find me wherever the action is 7^~", "7^~ Loads of forgotten knowledge is within our grasp! 7^~"}
 
 --Gold
 flashit.Gold = {}
@@ -72,12 +109,13 @@ flashit.Gold.card.loco.balance = 0
 --flashit.Gold.lucky = 0.77
 flashit.Gold.cast = "~*~ Time is money friend! ~*~"
 
---Gold
+
+--Scarlet
 flashit.Scarlet = {}
 flashit.Scarlet.gyretex = "LunacyE"
 flashit.Scarlet.gyreclr = "Scarlet"
 --flashit.Gold.troll = 26375
---flashit.Scarlet.flashtime = 7.11
+--flashit.Scarlet.flashtime = 3
 flashit.Scarlet.lsSpinOver = 71
 flashit.Scarlet.overTime = 7.11
 flashit.Scarlet.active = 0.0169
@@ -87,14 +125,17 @@ flashit.Scarlet.card = {}
 flashit.Scarlet.card.house = "scarlet"
 flashit.Scarlet.card.affinity = 3696
 flashit.Scarlet.card.flip = function()
-	return (0.0369 + tonumber(getloco("diSTurbed")) / 1669)
+	return (0.169 + getloco("diSTurbed") / 961)
+	--return (0.0369 + tonumber(getloco("diSTurbed")) / 1669)
 end
 flashit.Scarlet.card.avatar = 68967
 flashit.Scarlet.card.suit = "Scarlet"
 flashit.Scarlet.card.loco = {}
 flashit.Scarlet.card.loco.balance = 0
 flashit.Scarlet.locoTest = function()
-	return not tonumber(getloco("diSTurbed"))
+	--local sp = getloco("spell")
+	--sp = sp ~= "Scarlet"
+	return (getloco("spell") ~= "Scarlet")
 end
 flashit.Scarlet.loco = {}
 flashit.Scarlet.loco.dippX = 0.77
@@ -105,12 +146,13 @@ flashit.Scarlet.loco.pulse = {}
 flashit.Scarlet.loco.pulse.cnt = 1
 flashit.Scarlet.loco.pulse.amt = 0.03
 flashit.Scarlet.loco.pulse.tgt = 0.44
-flashit.Scarlet.loco.flashTime = GetTimePreciseSec() + 1
+flashit.Scarlet.loco.flashTime = 3
 --flashit.Gold.lucky = 0.77
-flashit.Scarlet.diSTurbed = function(dBd) return dBd * (1 - math.random() * 0.00313) end
+--flashit.Scarlet.diSTurbed = function(dBd) return dBd * (1 - math.random() * 0.00313) end
 flashit.Scarlet.lucky = function(lUCk) return lUCk * (1 + math.random() * 0.00131) end
 flashit.Scarlet.sigil = math.random(777)
-flashit.Scarlet.cast = "~*~ Time is money friend! ~*~"
+flashit.Scarlet.cast = "~^ Say Please ^~"
+
 
 
 function DrawCard(card)
@@ -280,7 +322,7 @@ grimoire.Scarlet.lsRadAdjX = 1.13
 grimoire.Scarlet.lsRadAdjY = 1.13
 grimoire.Scarlet.gyreVert = "Scarlet"
 grimoire.Scarlet.gyreTex = "LunacyE"
-grimoire.Scarlet.trOll = 2043
+grimoire.Scarlet.trOll = 4162
 grimoire.Scarlet.snarks = {1466150,561156,561158,561160,561165}
 
 --Death/The Underworld
@@ -338,7 +380,7 @@ grimoire.Obsidian.trOck.offX = 15
 grimoire.Obsidian.trOck.offY = -18
 grimoire.Obsidian.snarks = {561297,561327,561346,561301}
 
---Avarice
+--Luxury
 grimoire.Maroon = {}
 grimoire.Maroon.num = 36
 grimoire.Maroon.spin = 23
@@ -433,3 +475,51 @@ grimoire.Gold.gyreVert = "Gold"
 grimoire.Gold.gyreTex = "LunacyE"
 grimoire.Gold.trOll = 5233
 grimoire.Gold.snarks = {550805,550813,550806,550809}
+
+--Avarice
+grimoire.Chartreuse = {}
+grimoire.Chartreuse.num = 37
+grimoire.Chartreuse.spin = 21
+grimoire.Chartreuse.degInc = 21
+grimoire.Chartreuse.rd = 21
+grimoire.Chartreuse.rdInc = nil
+grimoire.Chartreuse.colorSet = "Chartreuse"
+grimoire.Chartreuse.lineClr = "Indigo"
+grimoire.Chartreuse.funcX = function(d,rd,rm,i)
+	local mp = math.pi / 180
+	d = d - rm
+	--local mp = 1
+	local x1 = math.sin(21 * (i+1) * mp)
+	local x2 = math.sin((d + rm) * 6 * mp)
+	local pt = (rd * x1) + (rd / 2 * x2)
+	return pt
+	--return rd * math.sin(d * mp)^3
+end
+grimoire.Chartreuse.funcY = function(d,rd,rm,i)
+	local mp = math.pi / 180
+	d = d - rm
+	--local mp = 1
+	local y1 = math.cos(21 * (i+1) * mp)
+	local y2 = math.cos((d + rm) * 6 * mp)
+	local pt = (rd * y1) + (rd / 2 * y2)
+	return pt
+	--return rd * math.cos(d * mp) - ((rd/3) * math.cos(2 * d * mp)) - ((rd/6) * math.cos(3 * d * mp)) - ((rd/4) * math.cos(4 * d * mp))
+end
+grimoire.Chartreuse.connect = true
+grimoire.Chartreuse.smooth = nil
+grimoire.Chartreuse.drX = nil
+grimoire.Chartreuse.drY = nil
+grimoire.Chartreuse.pulse = {}
+grimoire.Chartreuse.pulse.cnt = 1 -- current
+grimoire.Chartreuse.pulse.amt = 0.0007 -- speed
+grimoire.Chartreuse.pulse.tgt = 0.21 -- lower range
+grimoire.Chartreuse.dippX = 1.0
+grimoire.Chartreuse.dippY = 1.0
+grimoire.Chartreuse.lsSkew = 11
+grimoire.Chartreuse.rube = nil
+grimoire.Chartreuse.lsRadAdjX = 1.13
+grimoire.Chartreuse.lsRadAdjY = 1.13
+grimoire.Chartreuse.gyreVert = "Chartreuse"
+grimoire.Chartreuse.gyreTex = "LunacyE"
+grimoire.Chartreuse.trOll = 5233
+grimoire.Chartreuse.snarks = {550805,550813,550806,550809}
