@@ -1,3 +1,7 @@
+local _, Lunacy = ...
+local GetFlightMaster = Lunacy.GetFlightMaster
+local Ramble = Lunacy.Ramble
+local colorMe = Lunacy.colorMe
 local HBD = LibStub("HereBeDragons-2.0")
 
 local Find = {
@@ -153,8 +157,12 @@ local matchSticks = {
 	["inscription"] = "Inscription Trainer",
 	["herbalist"] = "Herbalist",
 	["herbalism"] = "Herbalist",
+	["engineer"] = "Engineer",
 	["ore"] = "Metal & Stone",
 	["herb"] = "Herb",
+	["inn"] = "Inn",
+	["embassy"] = "Embassy",
+	["embasy"] = "Embassy",
 }
 
 local destinations = {
@@ -425,7 +433,7 @@ local function FindThing(thing)
 	
 end
 
-function WhereIs(txt)
+Lunacy.WhereIs = function(txt)
 	if string.sub(txt, 1, 7) == "portal " or string.sub(txt, 1, 5) == "port " or txt == "port" or txt == "portal" then
 		txt = string.gsub(txt, "portal ", "")
 		txt = string.gsub(txt, "port ", "")

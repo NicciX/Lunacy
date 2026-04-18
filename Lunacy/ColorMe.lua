@@ -1,8 +1,17 @@
 --ColorMe!
+local _, Lunacy = ...
+
+local Ramble = Lunacy.Ramble
+local caPit = Lunacy.caPit
+local colorMe
+local SetLoco = Lunacy.SetLoco
 
 local curDex = 0
 local currentGroup = "blue"
 curClr = "Blue"
+
+-- for r,g,b's
+-- /luna loon.table_to_string({loon.hex2rgb(loon.GetHexColor("SteelBlue"))}, ",")
 
 local ColorTable = {
 	["DEX"] = {
@@ -156,6 +165,8 @@ local ColorTable = {
 	["Coffee"] = {"4B3619", "brown"},
 	["Brown"] = {"48260D", "brown"}, --Pecan
 	["Wood"] = {"402F1D", "brown"},
+	["Leather"] = {"624A2E", "brown"},
+	["Hazel"] = {"AE734E", "brown"},
 	--Red
 	["Red"] = {"D0312D", "red"},
 	["ImperialRed"] = {"ED2939", "red"},
@@ -187,6 +198,7 @@ local ColorTable = {
 	["Smoke"] = {"F5F5F5", "white"},
 	["BabyPowder"] = {"FEFEFA", "white"},
 	["Snow"] = {"F5FEFD", "white"},
+	["Platinum"] = "C5E8E8",
 	["Silver"] = {"777781", "white"},
 	["Ivory"] = {"FFFFF0", "white"},
 	["Seashell"] = {"FFF5EE", "white"},
@@ -225,22 +237,32 @@ function Color(name)
 	end
 end
 
+Lunacy.colorMe = function(msg,clr)
+	local coLor = Color(clr)
+	if not coLor then
+		coLor = "ffffff"
+	end
+	if not msg then
+		msg = tostring(msg)
+	end
+	coLor = coLor..msg.."|r"
+	return coLor
+end
 
-
-function GetHexColor(clr)
+Lunacy.GetHexColor = function(clr)
 	if ColorTable[clr] and ColorTable[clr][1] then
 		return ColorTable[clr][1]
 	end
 end
 
-function SetColorGroup(group)
+Lunacy.SetColorGroup = function(group)
 	if ColorTable.DEX[group] then
 		currentGroup = group
 		curDex = 0
 		group = caPit(group)
 		Ramble("color group set to "..colorMe(group,group)..".", colorMe("[ColorMe] ", "Pine"))
-	elseif group and ColorTable[caPit(group)] then
-		group = caPit(group)
+	elseif group and ColorTable[group] then
+		--group = caPit(group)
 		currentGroup = ColorTable[group][2]
 		curDex = 0
 		local brk
@@ -272,7 +294,7 @@ function raInBow(cG, cD)
 	end
 end
 
-function GetNextColor(tag)
+Lunacy.GetNextColor = function(tag)
 	if tag and ColorTable.DEX[tag] then
 		currentGroup = tag
 	end
@@ -287,7 +309,9 @@ function GetNextColor(tag)
 	return curClr, Color(curClr), currentGroup, curDex
 end
 
-function popClrTbl()
+Lunacy.popClrTbl = function()
+	colorMe = Lunacy.colorMe
+	SetLoco = Lunacy.SetLoco
 	local tbl = ColorTable.DEX
 	for k,v in pairs(tbl) do
 		for c,d in pairs(ColorTable) do
@@ -299,5 +323,6 @@ function popClrTbl()
 		end
 	end
 end
+
 
 
